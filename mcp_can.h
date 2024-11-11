@@ -25,7 +25,17 @@
 #define _MCP2515_H_
 
 #include "mcp_can_dfs.h"
+
 #define MAX_CHAR_IN_MESSAGE 8
+
+struct CANFrame {
+    uint32_t id;
+    uint8_t rtr;      // Remote Transmission Request bit
+    uint8_t ide;      // Identifier Extension bit
+    uint8_t dlc;   // Data Length Code
+    uint8_t data[8];  // Fixed-size array for data bytes
+};
+
 
 class MCP_CAN
 {
@@ -118,6 +128,8 @@ public:
     INT8U setMode(INT8U opMode);                                        // Set operational mode
     INT8U sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf);      // Send message to transmit buffer
     INT8U sendMsgBuf(INT32U id, INT8U len, INT8U *buf);                 // Send message to transmit buffer
+    INT8U readMsgBuf(CANFrame * frame);
+    INT8U readMsgBuf(INT32U *id, INT8U *rtr, INT8U *ide, INT8U *dlc, INT8U *buf);   // Read message from receive buffer
     INT8U readMsgBuf(INT32U *id, INT8U *ext, INT8U *len, INT8U *buf);   // Read message from receive buffer
     INT8U readMsgBuf(INT32U *id, INT8U *len, INT8U *buf);               // Read message from receive buffer
     INT8U checkReceive(void);                                           // Check for received data
